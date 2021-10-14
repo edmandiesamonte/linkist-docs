@@ -1,0 +1,19 @@
+type: object
+properties:
+  id:
+    $ref: ../properties/NumberedId.yaml
+  host:
+    allOf:
+      - $ref: ../enums/Host.yaml
+      - description: Preferred URL Host
+        format: hostname
+        maxLength: 255
+        example: linkist.me
+        default: linkist.me
+        nullable: true
+  path:
+    description: Preferred URL Path
+    type: string
+    maxLength: 255
+    example: acme-services
+    nullable: true

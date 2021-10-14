@@ -1,0 +1,14 @@
+type: object
+properties:
+  id:
+    $ref: ../properties/NumberedId.yaml
+  name:
+    description: Bucket Name
+    type: string
+    maxLength: 255
+    example: Primary Landing Page
+  url:
+    description: Final Redirect URL
+    type: string
+    format: url
+    example: https://example.com

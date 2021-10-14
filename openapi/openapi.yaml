@@ -1,0 +1,14 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Linkist.Me
+  description: One Link, Multi-Landing Page.
+servers:
+  - url: 'https://api.linkist.me'
+paths:
+  /users:
+    $ref: 'paths/users.yaml'
+  /users/login:
+    $ref: 'paths/users@login.yaml'
+  /quick-links:
+    $ref: 'paths/quick-links.yaml'

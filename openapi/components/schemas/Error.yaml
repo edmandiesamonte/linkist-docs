@@ -1,0 +1,6 @@
+required:
+  - code
+  - message
+properties:
+  message:
+    type: string

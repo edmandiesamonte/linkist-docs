@@ -1,0 +1,21 @@
+allOf:
+  - $ref: ../schemas/User.yaml
+  - properties:
+      token:
+        type: object
+        properties:
+          type:
+            description: Token Type
+            type: string
+            enum:
+              - bearer
+          value:
+            description: Token Value
+            type: string
+            example: U0MU1RWxU5qJZ04n4X1EsoefsjepDZx7
+          expiresAt:
+            allOf:
+              - description: Token Expiration Timestamp
+              - $ref: ../properties/Timestamp.yaml
+    readOnly: true
+    description: Authentication Token

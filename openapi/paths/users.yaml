@@ -1,0 +1,30 @@
+post:
+  summary: Register a User
+  operationId: RegisterUser
+  tags:
+    - Users
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          allOf:
+            - required:
+                - name
+                - email
+                - password
+                - passwordConfirmation
+            - $ref: ../components/schemas/User.yaml
+  responses:
+    '201':
+      description: The users has been registered successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/User.yaml
+    422:
+      $ref: ../components/responses/ValidationErrorResponse.yaml
+    default:
+      $ref: ../components/responses/ErrorResponse.yaml
+
+

@@ -1,0 +1,14 @@
+type: object
+properties:
+  email:
+    description: Email
+    type: string
+    format: email
+    example: john.doe@example.com
+  password:
+    description: Password
+    type: string
+    minLength: 6
+    maxLength: 255
+    writeOnly: true
+    example: p@ssw0rd

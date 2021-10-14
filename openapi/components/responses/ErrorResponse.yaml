@@ -1,0 +1,9 @@
+description: Unexpected error
+content:
+  application/json:
+    schema:
+      required:
+        - message
+      properties:
+        message:
+          type: string

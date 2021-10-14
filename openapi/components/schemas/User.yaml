@@ -1,0 +1,50 @@
+type: object
+properties:
+  id:
+    $ref: ../properties/NumberedId.yaml
+  name:
+    description: Full name
+    type: string
+    maxLength: 255
+    example: John Doe
+  email:
+    description: Email
+    type: string
+    format: email
+    example: john.doe@example.com
+  password:
+    description: Password
+    type: string
+    minLength: 6
+    maxLength: 255
+    writeOnly: true
+    example: p@ssw0rd
+  passwordConfirmation:
+    description: |
+      Password confirmation.
+      Must be identical to `password`
+    type: string
+    minLength: 6
+    maxLength: 255
+    writeOnly: true
+    example: p@ssw0rd
+  status:
+    description: Account status
+    type: string
+    enum:
+      - active
+      - pending-verification
+      - pending-approval
+      - suspended
+      - inactive
+      - deactivated
+    example: active
+    readOnly: true
+  createdAt:
+    allOf:
+      - description: Creation Timestamp
+      - $ref: ../properties/Timestamp.yaml
+  updatedAt:
+    allOf:
+      - description: Last Update Timestamp
+      - $ref: ../properties/Timestamp.yaml

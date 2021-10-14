@@ -1,0 +1,19 @@
+{
+  "name": "linkistme-api-documentation",
+  "version": "1.0.0",
+  "description": "Linkist.Me API Documentation",
+  "main": "index.js",
+  "repository": "git@github.com:edmandiesamonte/linkist-docs.git",
+  "author": "Edmandie Samonte <edmandie.samonte@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "@redocly/openapi-cli": "^1.0.0-beta.61"
+  },
+  "scripts": {
+    "stats": "openapi stats openapi/openapi.yaml",
+    "lint": "openapi lint openapi/openapi.yaml",
+    "preview": "openapi preview-docs openapi/openapi.yaml",
+    "serve": "yarn preview",
+    "build": "openapi bundle openapi/openapi.yaml --output build/openapi.json"
+  }
+}

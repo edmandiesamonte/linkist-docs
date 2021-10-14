@@ -1,0 +1,28 @@
+post:
+  summary: Login a User
+  operationId: LoginUser
+  tags:
+    - Users
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          allOf:
+            - required:
+                - email
+                - password
+            - $ref: ../components/requests/LoginRequest.yaml
+  responses:
+    '200':
+      description: The users has been registered successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/responses/LoginResponse.yaml
+    422:
+      $ref: ../components/responses/ValidationErrorResponse.yaml
+    default:
+      $ref: ../components/responses/ErrorResponse.yaml
+
+

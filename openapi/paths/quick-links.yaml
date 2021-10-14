@@ -1,0 +1,31 @@
+post:
+  summary: Create a Quick Link
+  operationId: CreateQuickLink
+  tags:
+    - Links
+  parameters:
+    - $ref: ../components/parameters/headers/X-Recaptcha-Code.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          allOf:
+            - required:
+                - email
+                - finalUrl
+                - finalUrls
+            - $ref: ../components/schemas/QuickLink.yaml
+  responses:
+    '201':
+      description: The quick link has been created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/QuickLink.yaml
+    422:
+      $ref: ../components/responses/ValidationErrorResponse.yaml
+    default:
+      $ref: ../components/responses/ErrorResponse.yaml
+
+

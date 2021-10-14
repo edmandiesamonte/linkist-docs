@@ -1,0 +1,6 @@
+name: X-Recaptcha-Code
+in: header
+description: Recaptcha V3 Code Response
+required: false
+schema:
+  type: string

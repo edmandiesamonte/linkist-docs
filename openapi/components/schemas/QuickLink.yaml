@@ -1,0 +1,65 @@
+type: object
+properties:
+  id:
+    $ref: ../properties/NumberedId.yaml
+  email:
+    description: Link Owner's Email
+    type: string
+    format: email
+    example: john.doe@example.com
+  host:
+    allOf:
+      - $ref: ../enums/Host.yaml
+      - description: Preferred URL Host
+        format: hostname
+        maxLength: 255
+        example: linkist.me
+        default: linkist.me
+        nullable: true
+  path:
+    description: Preferred URL Path
+    type: string
+    format: urlpath
+    maxLength: 255
+    example: acme-services
+    nullable: true
+  finalUrl:
+    description: |
+      Final Redirect URL.
+
+      Required if `finalUrls` is not provided.
+    type: string
+    format: url
+    example: https://example.com
+  finalUrls:
+    description: |
+      Final Redirect URLs.
+
+      Required if `finalUrl` is not provided.
+    type: array
+    items:
+      type: object
+      properties:
+        url:
+          description: Final Redirect URL
+          type: string
+          format: url
+          example: https://example.com
+        allocation:
+          description: |
+            Traffic Allocation (Percentage).
+
+            If used with other buckets for a link, total allocation should be 100.
+            If all buckets have `null` value, traffic will be allocated equally.
+          type: number
+          minimum: 1
+          maximum: 100
+          nullable: true
+  linkId:
+    allOf:
+      - $ref: ../properties/NumberedId.yaml
+      - readOnly: true
+  bucketId:
+    allOf:
+      - $ref: ../properties/NumberedId.yaml
+      - readOnly: true
