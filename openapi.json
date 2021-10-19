@@ -1,0 +1,462 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Linkist.Me",
+    "description": "One Link, Multi-Landing Page."
+  },
+  "servers": [
+    {
+      "url": "https://api.linkist.me"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Register a User",
+        "operationId": "RegisterUser",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "required": [
+                      "name",
+                      "email",
+                      "password",
+                      "passwordConfirmation"
+                    ]
+                  },
+                  {
+                    "$ref": "#/components/schemas/User"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The users has been registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login a User",
+        "operationId": "LoginUser",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "required": [
+                      "email",
+                      "password"
+                    ]
+                  },
+                  {
+                    "$ref": "#/components/schemas/LoginRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The users has been registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/quick-links": {
+      "post": {
+        "summary": "Create a Quick Link",
+        "operationId": "CreateQuickLink",
+        "tags": [
+          "Links"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Recaptcha-Code"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "required": [
+                      "email",
+                      "finalUrl",
+                      "finalUrls"
+                    ]
+                  },
+                  {
+                    "$ref": "#/components/schemas/QuickLink"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The quick link has been created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuickLink"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NumberedId": {
+        "type": "integer",
+        "format": "int64",
+        "readOnly": true,
+        "example": 1824,
+        "description": "Resource ID"
+      },
+      "Timestamp": {
+        "type": "string",
+        "example": "2021-09-01T08:41:05.000000Z",
+        "readOnly": true
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/NumberedId"
+          },
+          "name": {
+            "description": "Full name",
+            "type": "string",
+            "maxLength": 255,
+            "example": "John Doe"
+          },
+          "email": {
+            "description": "Email",
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "description": "Password",
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 255,
+            "writeOnly": true,
+            "example": "p@ssw0rd"
+          },
+          "passwordConfirmation": {
+            "description": "Password confirmation.\nMust be identical to `password`\n",
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 255,
+            "writeOnly": true,
+            "example": "p@ssw0rd"
+          },
+          "status": {
+            "description": "Account status",
+            "type": "string",
+            "enum": [
+              "active",
+              "pending-verification",
+              "pending-approval",
+              "suspended",
+              "inactive",
+              "deactivated"
+            ],
+            "example": "active",
+            "readOnly": true
+          },
+          "createdAt": {
+            "allOf": [
+              {
+                "description": "Creation Timestamp"
+              },
+              {
+                "$ref": "#/components/schemas/Timestamp"
+              }
+            ]
+          },
+          "updatedAt": {
+            "allOf": [
+              {
+                "description": "Last Update Timestamp"
+              },
+              {
+                "$ref": "#/components/schemas/Timestamp"
+              }
+            ]
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "description": "Email",
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "description": "Password",
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 255,
+            "writeOnly": true,
+            "example": "p@ssw0rd"
+          }
+        }
+      },
+      "LoginResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "properties": {
+              "token": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "description": "Token Type",
+                    "type": "string",
+                    "enum": [
+                      "bearer"
+                    ]
+                  },
+                  "value": {
+                    "description": "Token Value",
+                    "type": "string",
+                    "example": "U0MU1RWxU5qJZ04n4X1EsoefsjepDZx7"
+                  },
+                  "expiresAt": {
+                    "allOf": [
+                      {
+                        "description": "Token Expiration Timestamp"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Timestamp"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "readOnly": true,
+            "description": "Authentication Token"
+          }
+        ]
+      },
+      "Host": {
+        "type": "string",
+        "enum": [
+          "linkist.me",
+          "linkist.to"
+        ]
+      },
+      "QuickLink": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/NumberedId"
+          },
+          "email": {
+            "description": "Link Owner's Email",
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "host": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Host"
+              },
+              {
+                "description": "Preferred URL Host",
+                "format": "hostname",
+                "maxLength": 255,
+                "example": "linkist.me",
+                "default": "linkist.me",
+                "nullable": true
+              }
+            ]
+          },
+          "path": {
+            "description": "Preferred URL Path",
+            "type": "string",
+            "format": "urlpath",
+            "maxLength": 255,
+            "example": "acme-services",
+            "nullable": true
+          },
+          "finalUrl": {
+            "description": "Final Redirect URL.\n\nRequired if `finalUrls` is not provided.\n",
+            "type": "string",
+            "format": "url",
+            "example": "https://example.com"
+          },
+          "finalUrls": {
+            "description": "Final Redirect URLs.\n\nRequired if `finalUrl` is not provided.\n",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "Final Redirect URL",
+                  "type": "string",
+                  "format": "url",
+                  "example": "https://example.com"
+                },
+                "allocation": {
+                  "description": "Traffic Allocation (Percentage).\n\nIf used with other buckets for a link, total allocation should be 100.\nIf all buckets have `null` value, traffic will be allocated equally.\n",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 100,
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "linkId": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NumberedId"
+              },
+              {
+                "readOnly": true
+              }
+            ]
+          },
+          "bucketId": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NumberedId"
+              },
+              {
+                "readOnly": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "description": "Unexpected error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidationErrorResponse": {
+        "description": "Invalid data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Error messages"
+                    },
+                    "example": [
+                      "Must be less than 10 characters",
+                      "Must contain at least 1 numeric character"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "X-Recaptcha-Code": {
+        "name": "X-Recaptcha-Code",
+        "in": "header",
+        "description": "Recaptcha V3 Code Response",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
